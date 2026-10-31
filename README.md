@@ -21,7 +21,8 @@ Designed specifically for internal team operations with **Role-Based Access Cont
 
 ### 2. 📊 Executive Sales Dashboard (`/`)
 - **Metrik KPI:** Total Leads (+18% MoM), Active Pipeline Value, Total Revenue Won, dan Conversion Rate.
-- **Executive Deal Insights & Action Priorities:** Rekomendasi terarah mengenai prospek panas (*hot leads*) dan prioritas tindakan closing.
+- **Sales Quota & Revenue Target Tracker:** Monitoring capaian omset real-time vs target kuartalan perusahaan (Rp 500 Jt) beserta leaderboard progres capaian per individu sales rep.
+- **Executive Deal Insights & Stale Deals Auto-Alert:** Rekomendasi prospek panas (*hot leads*) serta peringatan visual otomatis untuk deal yang mandek tanpa interaksi.
 - **Quick Activity Logger:** Form pencatatan interaksi langsung di dashboard tanpa berpindah halaman.
 - **Distribusi Funnel Pipeline:** Visualisasi sebaran nominal deal di 4 tahap penjualan.
 
@@ -34,6 +35,8 @@ Designed specifically for internal team operations with **Role-Based Access Cont
 ### 4. 🗂️ Pipeline Deals Kanban (`/pipeline`)
 - **Papan Kanban 4 Tahap:** *Lead Inbound*, *Qualified*, *Proposal*, dan *Closed Won*.
 - **Drag-and-Drop:** Geser kartu prospek antar kolom secara responsif dengan *optimistic UI updates*.
+- **1-Click Quotation & Invoice PDF Generator:** Cetak dokumen surat penawaran harga resmi (*Official Quotation*) berstandar A4 print-ready lengkap dengan nomor dokumen, rincian biaya, syarat pembayaran, dan legalitas tanda tangan.
+- **Stale Deal Warning Badges:** Badge peringatan *"Mandek X Hari"* pada kartu prospek yang memerlukan follow-up segera.
 - **Indikator Prioritas 4px:** Garis aksen warna di tepi kiri kartu (Merah = High, Kuning = Medium, Abu-abu = Low).
 - **Pintasan 1-Klik:** Pemindah tahap cepat dan tombol `+ Tambah ke Tahap Ini` di setiap kolom.
 

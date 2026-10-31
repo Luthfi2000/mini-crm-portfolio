@@ -18,6 +18,8 @@ import {
   CheckCircle2,
   Filter,
   ArrowRight,
+  FileText,
+  Clock,
 } from "lucide-react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
@@ -26,6 +28,7 @@ import { EditDealModal } from "@/components/modals/EditDealModal";
 import { DeleteConfirmModal } from "@/components/modals/DeleteConfirmModal";
 import { AddContactModal } from "@/components/modals/AddContactModal";
 import { CommandPalette } from "@/components/modals/CommandPalette";
+import { QuotationModal } from "@/components/modals/QuotationModal";
 import { Deal, DealStage } from "@/lib/types";
 import {
   formatDate,
@@ -104,6 +107,7 @@ export default function PipelinePage() {
   const [preselectedStage, setPreselectedStage] = useState<DealStage>("Lead");
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
   const [deletingDeal, setDeletingDeal] = useState<Deal | null>(null);
+  const [quotationDeal, setQuotationDeal] = useState<Deal | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [isCommandOpen, setIsCommandOpen] = useState(false);
 
@@ -413,6 +417,10 @@ export default function PipelinePage() {
                               ? "border-l-4 border-l-amber-500"
                               : "border-l-4 border-l-slate-300";
 
+                          const dealDate = new Date(deal.updatedAt || deal.createdAt);
+                          const diffDays = Math.max(1, Math.floor((new Date().getTime() - dealDate.getTime()) / (1000 * 3600 * 24)));
+                          const isStale = deal.stage !== "Won" && deal.stage !== "Lost" && diffDays >= 2;
+
                           return (
                             <div
                               key={deal.id}
@@ -424,11 +432,23 @@ export default function PipelinePage() {
                             >
                               {/* Top row: Priority & Actions */}
                               <div className="flex items-center justify-between gap-2">
-                                <span
-                                  className={`rounded-md border px-2 py-0.5 text-[10px] ${priorityBadge.bg} ${priorityBadge.text} ${priorityBadge.border}`}
-                                >
-                                  {deal.priority}
-                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  <span
+                                    className={`rounded-md border px-2 py-0.5 text-[10px] ${priorityBadge.bg} ${priorityBadge.text} ${priorityBadge.border}`}
+                                  >
+                                    {deal.priority}
+                                  </span>
+
+                                  {isStale && (
+                                    <span
+                                      className="inline-flex items-center gap-0.5 rounded-md bg-amber-500/10 border border-amber-500/30 px-1.5 py-0.5 text-[9px] font-extrabold text-amber-700 animate-pulse"
+                                      title="Deal ini belum ada tindak lanjut dalam beberapa hari terakhir!"
+                                    >
+                                      <Clock className="h-2.5 w-2.5 text-amber-600" />
+                                      <span>Mandek {diffDays} hr</span>
+                                    </span>
+                                  )}
+                                </div>
 
                                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                   <button
@@ -511,23 +531,34 @@ export default function PipelinePage() {
                                 )}
                               </div>
 
-                              {/* Quick Move Stage Selector */}
-                              <div className="mt-2.5 pt-2 border-t border-dashed border-slate-100 flex items-center justify-between">
-                                <span className="text-[10px] font-medium text-slate-400">
-                                  Pindah tahap:
-                                </span>
-                                <select
-                                  value={deal.stage}
-                                  onChange={(e) =>
-                                    updateDealStage(deal.id, e.target.value as DealStage)
-                                  }
-                                  className="text-[10px] font-bold text-slate-700 rounded-lg border border-slate-200 bg-slate-50 px-2 py-0.5 focus:outline-hidden cursor-pointer"
+                              {/* Quick Move Stage & Action Row */}
+                              <div className="mt-2.5 pt-2 border-t border-dashed border-slate-100 flex items-center justify-between gap-1.5">
+                                <button
+                                  onClick={() => setQuotationDeal(deal)}
+                                  className="inline-flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-700 px-2 py-1 text-[10px] font-bold transition-colors cursor-pointer"
+                                  title="Cetak Surat Penawaran Resmi (PDF)"
                                 >
-                                  <option value="Lead">Lead</option>
-                                  <option value="Qualified">Qualified</option>
-                                  <option value="Proposal">Proposal</option>
-                                  <option value="Won">Won (Deal Closing)</option>
-                                </select>
+                                  <FileText className="h-3 w-3" />
+                                  <span>Quotation</span>
+                                </button>
+
+                                <div className="flex items-center gap-1">
+                                  <span className="text-[10px] font-medium text-slate-400">
+                                    Tahap:
+                                  </span>
+                                  <select
+                                    value={deal.stage}
+                                    onChange={(e) =>
+                                      updateDealStage(deal.id, e.target.value as DealStage)
+                                    }
+                                    className="text-[10px] font-bold text-slate-700 rounded-lg border border-slate-200 bg-slate-50 px-2 py-0.5 focus:outline-hidden cursor-pointer"
+                                  >
+                                    <option value="Lead">Lead</option>
+                                    <option value="Qualified">Qualified</option>
+                                    <option value="Proposal">Proposal</option>
+                                    <option value="Won">Won (Deal Closing)</option>
+                                  </select>
+                                </div>
                               </div>
                             </div>
                           );
@@ -583,6 +614,12 @@ export default function PipelinePage() {
       <CommandPalette
         isOpen={isCommandOpen}
         onClose={() => setIsCommandOpen(false)}
+      />
+
+      <QuotationModal
+        deal={quotationDeal}
+        isOpen={!!quotationDeal}
+        onClose={() => setQuotationDeal(null)}
       />
     </div>
   );

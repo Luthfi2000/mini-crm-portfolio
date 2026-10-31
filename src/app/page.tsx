@@ -293,12 +293,12 @@ export default function DashboardPage() {
               {/* Executive Deal Insights - Clean High-Density Card */}
               <div className="rounded-2xl border border-blue-200/90 bg-gradient-to-r from-blue-50/70 via-indigo-50/40 to-white p-5 shadow-xs">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  <div className="flex items-start gap-3.5">
+                  <div className="flex items-start gap-3.5 flex-1">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-500/20">
                       <Zap className="h-5 w-5" />
                     </div>
 
-                    <div>
+                    <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900">
                           Executive Deal Insights & Action Priorities
@@ -327,6 +327,22 @@ export default function DashboardPage() {
                           </span>
                         </div>
                       </div>
+
+                      {/* Stale Deals Alert Banner (Opsi C) */}
+                      <div className="mt-3 flex items-center justify-between rounded-xl bg-amber-500/10 border border-amber-500/30 p-2.5 text-xs text-amber-900">
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-4 w-4 text-amber-600 shrink-0 animate-pulse" />
+                          <span className="font-semibold text-[11px]">
+                            <strong>Perhatian Follow-Up:</strong> Ditemukan 2 deal aktif mandek tanpa interaksi dalam 5 hari terakhir.
+                          </span>
+                        </div>
+                        <Link
+                          href="/pipeline"
+                          className="font-bold text-amber-800 hover:underline text-[11px] shrink-0"
+                        >
+                          Tinjau di Kanban →
+                        </Link>
+                      </div>
                     </div>
                   </div>
 
@@ -337,6 +353,117 @@ export default function DashboardPage() {
                     <span>Buka Kanban</span>
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </Link>
+                </div>
+              </div>
+
+              {/* Sales Target vs Actual Revenue Gauge & Quota Tracker (Opsi B) */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/60">
+                          <Target className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                            Target Penjualan Kuartal 4 (Sales Quota Tracker)
+                          </h3>
+                          <span className="text-[11px] text-slate-400 font-medium">
+                            Monitoring capaian closing vs target omset kuartalan perusahaan
+                          </span>
+                        </div>
+                      </div>
+
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-black text-emerald-700">
+                        {stats.targetProgress}% Tercapai
+                      </span>
+                    </div>
+
+                    <div className="space-y-2 mt-4">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-slate-500 font-medium">Realisasi Closing (Won):</span>
+                        <span className="font-extrabold text-slate-900 text-sm tabular-nums">
+                          {formatRupiah(stats.totalRevenueWon)}
+                        </span>
+                      </div>
+
+                      <div className="h-3.5 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/80">
+                        <div
+                          className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-1000 shadow-xs"
+                          style={{ width: `${stats.targetProgress}%` }}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium pt-1">
+                        <span>Target Minimum: Rp 0</span>
+                        <span>Target Kuartal: {formatRupiah(stats.targetRevenue)}</span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3 mt-5 pt-4 border-t border-slate-100">
+                      <div className="rounded-xl bg-slate-50 p-2.5">
+                        <span className="text-[10px] text-slate-400 uppercase font-bold block">
+                          Sisa Target
+                        </span>
+                        <p className="text-xs font-black text-slate-800 tabular-nums mt-0.5">
+                          {formatRupiah(Math.max(0, stats.targetRevenue - stats.totalRevenueWon))}
+                        </p>
+                      </div>
+
+                      <div className="rounded-xl bg-slate-50 p-2.5">
+                        <span className="text-[10px] text-slate-400 uppercase font-bold block">
+                          Pipeline Berjalan
+                        </span>
+                        <p className="text-xs font-black text-blue-600 tabular-nums mt-0.5">
+                          {formatRupiah(stats.activeDealsValue)}
+                        </p>
+                      </div>
+
+                      <div className="rounded-xl bg-slate-50 p-2.5">
+                        <span className="text-[10px] text-slate-400 uppercase font-bold block">
+                          Coverage Ratio
+                        </span>
+                        <p className="text-xs font-black text-emerald-600 tabular-nums mt-0.5">
+                          3.2x Kuota Sisa
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                        Capaian Per Tim Sales
+                      </h4>
+                      <span className="text-[10px] font-bold text-slate-400">Target Q4</span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {stats.teamQuotas?.map((member, idx) => (
+                        <div key={idx} className="space-y-1">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-bold text-slate-800">{member.name}</span>
+                            <span className="font-extrabold text-slate-900 text-[11px] tabular-nums">
+                              {member.percentage}%
+                            </span>
+                          </div>
+                          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-blue-600 rounded-full transition-all duration-700"
+                              style={{ width: `${member.percentage}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-[10px] text-slate-400">
+                            <span>{member.role}</span>
+                            <span>{formatRupiah(member.achieved)}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 

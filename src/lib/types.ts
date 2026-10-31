@@ -119,6 +119,9 @@ export interface DashboardStats {
   activeDealsValue: number;
   wonDealsCount: number;
   totalRevenueWon: number;
+  targetRevenue: number;
+  targetProgress: number;
+  staleDealsCount: number;
   conversionRate: number;
   pipelineStages: {
     stage: DealStage;
@@ -129,5 +132,13 @@ export interface DashboardStats {
   }[];
   recentActivities: Activity[];
   recentDeals: Deal[];
+  teamQuotas: {
+    name: string;
+    role: string;
+    target: number;
+    achieved: number;
+    percentage: number;
+    avatarColor: string;
+  }[];
 }
 

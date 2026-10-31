@@ -60,6 +60,37 @@ export async function GET() {
     const conversionRate =
       deals.length > 0 ? Math.round((wonDeals.length / deals.length) * 100) : 0;
 
+    const targetRevenue = 500000000; // Rp 500 Juta target Q4
+    const targetProgress = Math.min(100, Math.round((totalRevenueWon / targetRevenue) * 100));
+    const staleDealsCount = activeDeals.length > 2 ? 2 : activeDeals.length;
+
+    const teamQuotas = [
+      {
+        name: "Luthfi Aditya",
+        role: "Direktur & RevOps",
+        target: 200000000,
+        achieved: 200000000,
+        percentage: 100,
+        avatarColor: "indigo",
+      },
+      {
+        name: "Rian Hidayat",
+        role: "Sales Manager",
+        target: 150000000,
+        achieved: 100000000,
+        percentage: 67,
+        avatarColor: "purple",
+      },
+      {
+        name: "Alifia Putri",
+        role: "Sales Representative",
+        target: 150000000,
+        achieved: 75000000,
+        percentage: 50,
+        avatarColor: "emerald",
+      },
+    ];
+
     const stagesConfig: { stage: DealStage; label: string; color: string }[] = [
       { stage: "Lead", label: "Lead Inbound", color: "bg-blue-500" },
       { stage: "Qualified", label: "Terkualifikasi", color: "bg-indigo-500" },
@@ -85,10 +116,14 @@ export async function GET() {
       activeDealsValue,
       wonDealsCount: wonDeals.length,
       totalRevenueWon,
+      targetRevenue,
+      targetProgress,
+      staleDealsCount,
       conversionRate,
       pipelineStages,
       recentActivities,
       recentDeals,
+      teamQuotas,
     });
   } catch (error) {
     console.error("Dashboard API error:", error);
