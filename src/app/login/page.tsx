@@ -257,6 +257,15 @@ export default function LoginPage() {
               🔒 <strong className="text-slate-300">Sistem Akses Internal:</strong> Akun baru hanya dapat didaftarkan dan dikonfigurasi perannya oleh <span className="text-blue-400 font-bold">Administrator</span> melalui modul Manajemen Tim.
             </p>
           </div>
+
+          <div className="mt-4 text-center">
+            <Link
+              href="/landing"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              <span>Pelajari Profil & Paket Solusi IT Nusantara CRM →</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

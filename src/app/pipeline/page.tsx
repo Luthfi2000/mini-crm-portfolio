@@ -21,6 +21,7 @@ import {
   FileText,
   Clock,
   ChevronDown,
+  MessageSquare,
 } from "lucide-react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
@@ -30,6 +31,7 @@ import { DeleteConfirmModal } from "@/components/modals/DeleteConfirmModal";
 import { AddContactModal } from "@/components/modals/AddContactModal";
 import { CommandPalette } from "@/components/modals/CommandPalette";
 import { QuotationModal } from "@/components/modals/QuotationModal";
+import { WhatsAppModal } from "@/components/modals/WhatsAppModal";
 import { Deal, DealStage } from "@/lib/types";
 import {
   formatDate,
@@ -109,6 +111,7 @@ export default function PipelinePage() {
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
   const [deletingDeal, setDeletingDeal] = useState<Deal | null>(null);
   const [quotationDeal, setQuotationDeal] = useState<Deal | null>(null);
+  const [whatsAppDeal, setWhatsAppDeal] = useState<Deal | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [isCommandOpen, setIsCommandOpen] = useState(false);
 
@@ -595,14 +598,25 @@ export default function PipelinePage() {
 
                               {/* Quick Move Stage & Action Row */}
                               <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
-                                <button
-                                  onClick={() => setQuotationDeal(deal)}
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 text-slate-600 px-2.5 py-1 text-[11px] font-semibold transition-all cursor-pointer shadow-2xs"
-                                  title="Cetak Surat Penawaran Resmi (PDF)"
-                                >
-                                  <FileText className="h-3.5 w-3.5 text-blue-600" />
-                                  <span>Quotation</span>
-                                </button>
+                                <div className="flex items-center gap-1.5">
+                                  <button
+                                    onClick={() => setQuotationDeal(deal)}
+                                    className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 text-slate-600 px-2 py-1 text-[11px] font-semibold transition-all cursor-pointer shadow-2xs"
+                                    title="Cetak Surat Penawaran Resmi (PDF)"
+                                  >
+                                    <FileText className="h-3 w-3 text-blue-600" />
+                                    <span>PDF</span>
+                                  </button>
+
+                                  <button
+                                    onClick={() => setWhatsAppDeal(deal)}
+                                    className="inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50/80 hover:bg-emerald-100 hover:border-emerald-300 hover:text-emerald-800 text-emerald-700 px-2 py-1 text-[11px] font-semibold transition-all cursor-pointer shadow-2xs"
+                                    title="Kirim Pesan Follow-Up WhatsApp Cepat"
+                                  >
+                                    <MessageSquare className="h-3 w-3 text-emerald-600" />
+                                    <span>WA</span>
+                                  </button>
+                                </div>
 
                                 <div className="relative">
                                   <select
@@ -680,6 +694,13 @@ export default function PipelinePage() {
         deal={quotationDeal}
         isOpen={!!quotationDeal}
         onClose={() => setQuotationDeal(null)}
+      />
+
+      <WhatsAppModal
+        deal={whatsAppDeal}
+        isOpen={!!whatsAppDeal}
+        onClose={() => setWhatsAppDeal(null)}
+        onActivityLogged={fetchDeals}
       />
     </div>
   );

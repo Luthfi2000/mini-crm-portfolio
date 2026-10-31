@@ -18,12 +18,18 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Public authentication API endpoints
+  // Public authentication & public lead ingestion API endpoints
   const isPublicApi =
     pathname === "/api/auth/login" ||
-    pathname === "/api/auth/logout";
+    pathname === "/api/auth/logout" ||
+    pathname === "/api/leads/capture";
 
   if (isPublicApi) {
+    return NextResponse.next();
+  }
+
+  // Public Marketing Landing Page
+  if (pathname === "/landing" || pathname.startsWith("/landing/")) {
     return NextResponse.next();
   }
 
