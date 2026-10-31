@@ -129,7 +129,7 @@ export default function DashboardPage() {
           onOpenQuickSearch={() => setIsCommandOpen(true)}
         />
 
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 max-w-[1600px] mx-auto w-full">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 max-w-[1680px] mx-auto w-full">
           {loading ? (
             <div className="flex h-96 items-center justify-center">
               <div className="flex flex-col items-center gap-2">
@@ -176,7 +176,7 @@ export default function DashboardPage() {
               {/* 4 Metric Cards - Strictly Aligned & Unified Heights */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {/* 1. Total Leads */}
-                <div className="flex flex-col justify-between h-[152px] rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs hover:shadow-md transition-shadow">
+                <div className="flex flex-col justify-between min-h-[148px] rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs hover:shadow-md transition-shadow">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                       Total Leads
@@ -207,7 +207,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* 2. Active Pipeline */}
-                <div className="flex flex-col justify-between h-[152px] rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs hover:shadow-md transition-shadow">
+                <div className="flex flex-col justify-between min-h-[148px] rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs hover:shadow-md transition-shadow">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                       Active Pipeline
@@ -235,7 +235,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* 3. Revenue Won */}
-                <div className="flex flex-col justify-between h-[152px] rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs hover:shadow-md transition-shadow">
+                <div className="flex flex-col justify-between min-h-[148px] rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs hover:shadow-md transition-shadow">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                       Revenue Won
@@ -260,7 +260,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* 4. Conversion Rate */}
-                <div className="flex flex-col justify-between h-[152px] rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs hover:shadow-md transition-shadow">
+                <div className="flex flex-col justify-between min-h-[148px] rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs hover:shadow-md transition-shadow">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                       Conversion Rate
@@ -555,7 +555,7 @@ export default function DashboardPage() {
                   </form>
 
                   {/* Activities List */}
-                  <div className="flex-1 space-y-3 overflow-y-auto max-h-[380px] pr-1">
+                  <div className="flex-1 space-y-3 overflow-y-auto max-h-[420px] pr-1">
                     {stats.recentActivities.length === 0 ? (
                       <div className="py-10 text-center text-xs text-slate-400">
                         Belum ada aktivitas tercatat.
@@ -625,7 +625,7 @@ export default function DashboardPage() {
                     </Link>
                   </div>
 
-                  <div className="flex-1 space-y-2.5 overflow-y-auto max-h-[440px] pr-1">
+                  <div className="flex-1 space-y-2.5 overflow-y-auto max-h-[420px] pr-1">
                     {stats.recentDeals.length === 0 ? (
                       <div className="py-10 text-center text-xs text-slate-400">
                         Belum ada deal terdaftar.
