@@ -119,8 +119,15 @@ function ContactsContent() {
     }
   };
 
+  const canDeleteContact = Boolean(currentUser?.role === "ADMIN" || permissions?.canDeleteContacts);
+
   const handleDelete = async () => {
     if (!deletingContact) return;
+    if (!canDeleteContact) {
+      alert("Hanya Administrator yang memiliki wewenang menghapus data ini demi keamanan data (Data Loss Prevention).");
+      setDeletingContact(null);
+      return;
+    }
     try {
       setDeleteLoading(true);
       const res = await fetch(`/api/contacts/${deletingContact.id}`, {
@@ -129,6 +136,9 @@ function ContactsContent() {
       if (res.ok) {
         setDeletingContact(null);
         fetchContacts();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Gagal menghapus kontak.");
       }
     } catch (err) {
       console.error("Gagal menghapus kontak:", err);
@@ -466,15 +476,21 @@ function ContactsContent() {
                               >
                                 <Edit className="h-4 w-4" />
                               </button>
-                              {(!permissions || permissions.canDeleteContacts) && (
-                                <button
-                                  onClick={() => setDeletingContact(contact)}
-                                  className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition-colors cursor-pointer"
-                                  title="Hapus Kontak (Admin Only)"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </button>
-                              )}
+                              <button
+                                onClick={() => setDeletingContact(contact)}
+                                className={`rounded-lg p-1.5 transition-colors cursor-pointer ${
+                                  canDeleteContact
+                                    ? "text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                                    : "text-slate-300 hover:bg-amber-50 hover:text-amber-600"
+                                }`}
+                                title={
+                                  canDeleteContact
+                                    ? "Hapus Kontak (Admin Only)"
+                                    : "Hanya Administrator yang memiliki wewenang menghapus data ini demi keamanan data (Data Loss Prevention)."
+                                }
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -505,6 +521,7 @@ function ContactsContent() {
         title="Hapus Klien Ini?"
         message={`Apakah Anda yakin ingin menghapus "${deletingContact?.name}"? Seluruh deal dan riwayat interaksi terkait klien ini juga akan dihapus permanen.`}
         loading={deleteLoading}
+        canDelete={canDeleteContact}
         onClose={() => setDeletingContact(null)}
         onConfirm={handleDelete}
       />

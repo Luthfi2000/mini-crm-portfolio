@@ -52,6 +52,8 @@ export default function ContactDetailPage(props: ContactDetailPageProps) {
 
   const [contact, setContact] = useState<Contact | null>(null);
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [permissions, setPermissions] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Modals
@@ -61,6 +63,8 @@ export default function ContactDetailPage(props: ContactDetailPageProps) {
   const [isAddDealOpen, setIsAddDealOpen] = useState(false);
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
   const [isCommandOpen, setIsCommandOpen] = useState(false);
+
+  const canDelete = Boolean(currentUser?.role === "ADMIN" || permissions?.canDeleteContacts);
 
   const fetchContact = async () => {
     try {
@@ -81,10 +85,24 @@ export default function ContactDetailPage(props: ContactDetailPageProps) {
 
   useEffect(() => {
     fetchContact();
+    fetch("/api/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) {
+          setCurrentUser(data.user);
+          setPermissions(data.permissions);
+        }
+      })
+      .catch(() => {});
   }, [id]);
 
   const handleDeleteContact = async () => {
     if (!contact) return;
+    if (!canDelete) {
+      alert("Hanya Administrator yang memiliki wewenang menghapus data ini demi keamanan data (Data Loss Prevention).");
+      setIsDeleteContactOpen(false);
+      return;
+    }
     try {
       setDeleteLoading(true);
       const res = await fetch(`/api/contacts/${contact.id}`, {
@@ -92,6 +110,9 @@ export default function ContactDetailPage(props: ContactDetailPageProps) {
       });
       if (res.ok) {
         router.push("/contacts");
+      } else {
+        const data = await res.json();
+        alert(data.error || "Gagal menghapus.");
       }
     } catch (err) {
       console.error("Gagal menghapus:", err);
@@ -225,7 +246,16 @@ export default function ContactDetailPage(props: ContactDetailPageProps) {
 
                     <button
                       onClick={() => setIsDeleteContactOpen(true)}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700 hover:bg-rose-100 transition-colors cursor-pointer"
+                      className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-bold transition-colors cursor-pointer ${
+                        canDelete
+                          ? "border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100"
+                          : "border-slate-200 bg-slate-50 text-slate-500 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200"
+                      }`}
+                      title={
+                        canDelete
+                          ? "Hapus Kontak (Admin Only)"
+                          : "Hanya Administrator yang memiliki wewenang menghapus data ini demi keamanan data (Data Loss Prevention)."
+                      }
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                       <span>Hapus</span>
@@ -409,6 +439,7 @@ export default function ContactDetailPage(props: ContactDetailPageProps) {
         title="Hapus Klien Ini?"
         message={`Apakah Anda yakin ingin menghapus "${contact?.name}"? Tindakan ini tidak dapat dibatalkan.`}
         loading={deleteLoading}
+        canDelete={canDelete}
         onClose={() => setIsDeleteContactOpen(false)}
         onConfirm={handleDeleteContact}
       />

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthUser } from "@/lib/auth";
+import { ROLE_PERMISSIONS } from "@/lib/types";
 
 export async function PATCH(
   request: NextRequest,
@@ -67,6 +69,17 @@ export async function DELETE(
   props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getAuthUser(request);
+    if (!user || !ROLE_PERMISSIONS[user.role]?.canDeleteDeals) {
+      return NextResponse.json(
+        {
+          error:
+            "Hanya Administrator yang memiliki wewenang menghapus data ini demi keamanan data (Data Loss Prevention).",
+        },
+        { status: 403 }
+      );
+    }
+
     const params = await props.params;
     const { id } = params;
 

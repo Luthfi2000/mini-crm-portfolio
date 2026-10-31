@@ -181,8 +181,15 @@ export default function PipelinePage() {
     }
   };
 
+  const canDeleteDeal = Boolean(currentUser?.role === "ADMIN" || permissions?.canDeleteDeals);
+
   const handleDeleteDeal = async () => {
     if (!deletingDeal) return;
+    if (!canDeleteDeal) {
+      alert("Hanya Administrator yang memiliki wewenang menghapus data ini demi keamanan data (Data Loss Prevention).");
+      setDeletingDeal(null);
+      return;
+    }
     try {
       setDeleteLoading(true);
       const res = await fetch(`/api/deals/${deletingDeal.id}`, {
@@ -191,6 +198,9 @@ export default function PipelinePage() {
       if (res.ok) {
         setDeletingDeal(null);
         fetchDeals();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Gagal menghapus deal.");
       }
     } catch (err) {
       console.error("Gagal menghapus deal:", err);
@@ -428,15 +438,21 @@ export default function PipelinePage() {
                                   >
                                     <Edit className="h-3.5 w-3.5" />
                                   </button>
-                                  {(!permissions || permissions.canDeleteDeals) && (
-                                    <button
-                                      onClick={() => setDeletingDeal(deal)}
-                                      className="p-1 text-slate-400 hover:text-rose-600 rounded-md cursor-pointer"
-                                      title="Hapus Deal (Admin Only)"
-                                    >
-                                      <Trash2 className="h-3.5 w-3.5" />
-                                    </button>
-                                  )}
+                                  <button
+                                    onClick={() => setDeletingDeal(deal)}
+                                    className={`p-1 rounded-md cursor-pointer transition-colors ${
+                                      canDeleteDeal
+                                        ? "text-slate-400 hover:text-rose-600 hover:bg-rose-50"
+                                        : "text-slate-300 hover:text-amber-600 hover:bg-amber-50"
+                                    }`}
+                                    title={
+                                      canDeleteDeal
+                                        ? "Hapus Deal (Admin Only)"
+                                        : "Hanya Administrator yang memiliki wewenang menghapus data ini demi keamanan data (Data Loss Prevention)."
+                                    }
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </button>
                                 </div>
                               </div>
 
@@ -560,6 +576,7 @@ export default function PipelinePage() {
         title="Hapus Prospek Deal?"
         message={`Apakah Anda yakin ingin menghapus deal "${deletingDeal?.title}"? Data tidak dapat dipulihkan.`}
         loading={deleteLoading}
+        canDelete={canDeleteDeal}
         onClose={() => setDeletingDeal(null)}
         onConfirm={handleDeleteDeal}
       />

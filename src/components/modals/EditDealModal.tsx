@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X, Edit, Loader2 } from "lucide-react";
 import { Deal, DealPriority, DealStage } from "@/lib/types";
 
@@ -11,37 +11,28 @@ interface EditDealModalProps {
   onSuccess: () => void;
 }
 
-export function EditDealModal({
-  isOpen,
+function EditDealForm({
   deal,
   onClose,
   onSuccess,
-}: EditDealModalProps) {
-  const [title, setTitle] = useState("");
-  const [value, setValue] = useState("");
-  const [stage, setStage] = useState<DealStage>("Lead");
-  const [priority, setPriority] = useState<DealPriority>("Medium");
-  const [expectedClose, setExpectedClose] = useState("");
+}: {
+  deal: Deal;
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
+  const [title, setTitle] = useState(deal.title || "");
+  const [value, setValue] = useState(deal.value ? deal.value.toString() : "0");
+  const [stage, setStage] = useState<DealStage>(deal.stage || "Lead");
+  const [priority, setPriority] = useState<DealPriority>(deal.priority || "Medium");
+  const [expectedClose, setExpectedClose] = useState(() => {
+    if (deal.expectedClose) {
+      const d = new Date(deal.expectedClose);
+      return d.toISOString().split("T")[0];
+    }
+    return "";
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (deal) {
-      setTitle(deal.title || "");
-      setValue(deal.value ? deal.value.toString() : "0");
-      setStage(deal.stage || "Lead");
-      setPriority(deal.priority || "Medium");
-      if (deal.expectedClose) {
-        const d = new Date(deal.expectedClose);
-        setExpectedClose(d.toISOString().split("T")[0]);
-      } else {
-        setExpectedClose("");
-      }
-      setError(null);
-    }
-  }, [deal]);
-
-  if (!isOpen || !deal) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,5 +210,23 @@ export function EditDealModal({
         </form>
       </div>
     </div>
+  );
+}
+
+export function EditDealModal({
+  isOpen,
+  deal,
+  onClose,
+  onSuccess,
+}: EditDealModalProps) {
+  if (!isOpen || !deal) return null;
+
+  return (
+    <EditDealForm
+      key={deal.id}
+      deal={deal}
+      onClose={onClose}
+      onSuccess={onSuccess}
+    />
   );
 }

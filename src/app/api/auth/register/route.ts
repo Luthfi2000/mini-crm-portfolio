@@ -41,9 +41,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Role assignment
-    const validRoles: UserRole[] = ["ADMIN", "MANAGER", "SALES_REP", "SUPPORT"];
-    const assignedRole: UserRole = validRoles.includes(role) ? role : "SALES_REP";
+    // Role assignment: Public self-registration always assigns "SALES_REP" by default,
+    // preventing unauthenticated privilege escalation to "ADMIN" or "MANAGER"
+    const assignedRole: UserRole = "SALES_REP";
 
     const colors = ["indigo", "emerald", "amber", "purple", "cyan", "rose", "violet", "teal"];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];

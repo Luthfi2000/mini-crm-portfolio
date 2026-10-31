@@ -10,10 +10,10 @@ import {
   User,
   Building,
   Shield,
-  ArrowRight,
   Loader2,
   CheckCircle2,
-  AlertCircle,
+  Info,
+  ShieldCheck,
 } from "lucide-react";
 import { UserRole } from "@/lib/types";
 
@@ -23,7 +23,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState<UserRole>("SALES_REP");
+  const role: UserRole = "SALES_REP";
   const [department, setDepartment] = useState("Sales & Business Development");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -81,19 +81,6 @@ export default function RegisterPage() {
     }
   };
 
-  const getRoleDescription = (selectedRole: UserRole) => {
-    switch (selectedRole) {
-      case "ADMIN":
-        return "👑 Hak Akses Penuh: Kelola pengguna tim, ekspor data CSV, hapus klien & deal, audit konfigurasi.";
-      case "MANAGER":
-        return "💼 Manajemen Tim: Pengawasan seluruh pipeline deal, persetujuan proposal, ekspor laporan CSV.";
-      case "SALES_REP":
-        return "🎯 Sales Operasional: Kelola prospek & deal pribadi, pencatatan panggilan & rapat, pemindahan tahap kanban.";
-      case "SUPPORT":
-        return "🛡️ Customer Success: Pemantauan akun pelanggan aktif, pencatatan tiket & kepuasan klien.";
-    }
-  };
-
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-['Plus_Jakarta_Sans',sans-serif]">
       {/* Background ambient lighting */}
@@ -110,7 +97,7 @@ export default function RegisterPage() {
           Daftar Akun Tim Internal
         </h2>
         <p className="mt-1 text-xs text-slate-400 font-medium">
-          Dapatkan akses sesuai peran kerja di Nusantara CRM Workspace
+          Akses operasional workspace tim penjualan Nusantara CRM
         </p>
       </div>
 
@@ -160,20 +147,16 @@ export default function RegisterPage() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-xs font-bold text-slate-300">
-                  Peran Akun (RBAC Role)
+                  Peran Akun Tim (RBAC Role)
                 </label>
                 <div className="relative mt-1">
-                  <Shield className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-                  <select
-                    value={role}
-                    onChange={(e) => setRole(e.target.value as UserRole)}
-                    className="w-full rounded-xl border border-slate-800 bg-slate-900/90 pl-10 pr-4 py-2.5 text-xs font-bold text-white focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
-                  >
-                    <option value="SALES_REP">Sales Representative</option>
-                    <option value="MANAGER">Sales Manager</option>
-                    <option value="ADMIN">System Administrator</option>
-                    <option value="SUPPORT">Customer Success</option>
-                  </select>
+                  <ShieldCheck className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-400" />
+                  <input
+                    type="text"
+                    readOnly
+                    value="Sales Representative"
+                    className="w-full rounded-xl border border-slate-800 bg-slate-900/60 pl-10 pr-4 py-2.5 text-xs font-bold text-blue-300 cursor-not-allowed select-none"
+                  />
                 </div>
               </div>
 
@@ -194,9 +177,22 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Role scope badge explanation */}
-            <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-3 text-[11px] text-blue-300 font-medium">
-              {getRoleDescription(role)}
+            {/* Informational Callout: RBAC policy and role assignment */}
+            <div className="rounded-2xl border border-blue-500/30 bg-blue-500/10 p-3.5 text-xs text-blue-200">
+              <div className="flex items-start gap-2.5">
+                <Info className="h-4 w-4 text-blue-400 shrink-0 mt-0.5" />
+                <div className="space-y-1 text-[11px] leading-relaxed">
+                  <p className="font-bold text-white">
+                    Kebijakan Peran & Hak Akses Akun:
+                  </p>
+                  <p className="text-slate-300">
+                    Akun baru didaftarkan secara default sebagai <strong className="text-blue-300 font-semibold">Sales Representative</strong> (kelola kontak & pipeline pribadi).
+                  </p>
+                  <p className="text-slate-400">
+                    Peran <strong className="text-amber-300 font-semibold">Administrator</strong> dan <strong className="text-emerald-300 font-semibold">Manager</strong> diberikan secara terpusat melalui menu <span className="text-white font-medium">Manajemen Tim</span> oleh Super Admin.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

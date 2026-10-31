@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X, Edit, Loader2 } from "lucide-react";
 import { Contact, ContactStatus } from "@/lib/types";
 
@@ -11,36 +11,24 @@ interface EditContactModalProps {
   onSuccess: () => void;
 }
 
-export function EditContactModal({
-  isOpen,
+function EditContactForm({
   contact,
   onClose,
   onSuccess,
-}: EditContactModalProps) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [company, setCompany] = useState("");
-  const [position, setPosition] = useState("");
-  const [status, setStatus] = useState<ContactStatus>("Lead");
-  const [notes, setNotes] = useState("");
+}: {
+  contact: Contact;
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
+  const [name, setName] = useState(contact.name || "");
+  const [email, setEmail] = useState(contact.email || "");
+  const [phone, setPhone] = useState(contact.phone || "");
+  const [company, setCompany] = useState(contact.company || "");
+  const [position, setPosition] = useState(contact.position || "");
+  const [status, setStatus] = useState<ContactStatus>(contact.status || "Lead");
+  const [notes, setNotes] = useState(contact.notes || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (contact) {
-      setName(contact.name || "");
-      setEmail(contact.email || "");
-      setPhone(contact.phone || "");
-      setCompany(contact.company || "");
-      setPosition(contact.position || "");
-      setStatus(contact.status || "Lead");
-      setNotes(contact.notes || "");
-      setError(null);
-    }
-  }, [contact]);
-
-  if (!isOpen || !contact) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -235,5 +223,23 @@ export function EditContactModal({
         </form>
       </div>
     </div>
+  );
+}
+
+export function EditContactModal({
+  isOpen,
+  contact,
+  onClose,
+  onSuccess,
+}: EditContactModalProps) {
+  if (!isOpen || !contact) return null;
+
+  return (
+    <EditContactForm
+      key={contact.id}
+      contact={contact}
+      onClose={onClose}
+      onSuccess={onSuccess}
+    />
   );
 }

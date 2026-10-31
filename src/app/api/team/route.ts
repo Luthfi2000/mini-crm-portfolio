@@ -30,9 +30,9 @@ export async function PATCH(request: NextRequest) {
   try {
     const user = await getAuthUser(request);
     // Only Admin can modify roles or active state
-    if (user && user.role !== "ADMIN") {
+    if (!user || user.role !== "ADMIN") {
       return NextResponse.json(
-        { error: "Akses ditolak. Hanya Administrator yang dapat mengubah peran tim." },
+        { error: "Akses ditolak. Hanya Administrator yang dapat mengubah data tim." },
         { status: 403 }
       );
     }
