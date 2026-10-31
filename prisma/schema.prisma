@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  password    String    // Hashed password
+  role        String    @default("SALES_REP") // "ADMIN", "MANAGER", "SALES_REP", "SUPPORT"
+  department  String?   @default("Sales")
+  avatarColor String?   @default("indigo")
+  isActive    Boolean   @default(true)
+  lastLogin   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Contact {
+  id          String     @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  position    String?
+  status      String     @default("Lead") // "Lead", "Prospect", "Customer", "Inactive"
+  avatarColor String?    @default("blue")
+  notes       String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  deals       Deal[]
+  activities  Activity[]
+}
+
+model Deal {
+  id            String     @id @default(cuid())
+  title         String
+  value         Float      @default(0)
+  stage         String     @default("Lead") // "Lead", "Qualified", "Proposal", "Won", "Lost"
+  priority      String     @default("Medium") // "Low", "Medium", "High"
+  expectedClose DateTime?
+  contactId     String
+  contact       Contact    @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  activities    Activity[]
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  type      String   // "Note", "Call", "Meeting", "Email"
+  title     String
+  content   String?
+  contactId String?
+  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  dealId    String?
+  deal      Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model AgentExecutionLog {
+  id         String   @id @default(cuid())
+  agentRole  String   // "SALES_REP", "MANAGER", "ADMIN"
+  agentName  String   // "SDR Agent", "Pipeline Copilot", "RevOps Analyst"
+  task       String
+  summary    String
+  status     String   @default("COMPLETED") // "COMPLETED", "RUNNING", "FAILED"
+  createdAt  DateTime @default(now())
+}
