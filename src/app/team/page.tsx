@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
   Shield,
   Users,
@@ -20,14 +19,17 @@ import {
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { CommandPalette } from "@/components/modals/CommandPalette";
+import { AddTeamMemberModal } from "@/components/modals/AddTeamMemberModal";
 import { User, UserRole, ROLE_PERMISSIONS } from "@/lib/types";
 import { formatDate, getAvatarBgClass, getInitials } from "@/lib/utils";
 
 export default function TeamPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCommandOpen, setIsCommandOpen] = useState(false);
+  const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   const fetchUsers = async () => {
@@ -46,6 +48,12 @@ export default function TeamPage() {
 
   useEffect(() => {
     fetchUsers();
+    fetch("/api/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && data.user) setCurrentUser(data.user);
+      })
+      .catch(() => {});
   }, []);
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
@@ -106,13 +114,20 @@ export default function TeamPage() {
               </p>
             </div>
 
-            <Link
-              href="/register"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-600 transition-colors shadow-xs shrink-0"
-            >
-              <UserPlus className="h-4 w-4" />
-              <span>Undang / Daftarkan Pengguna</span>
-            </Link>
+            {currentUser?.role === "ADMIN" ? (
+              <button
+                onClick={() => setIsAddUserOpen(true)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-600 transition-colors shadow-xs shrink-0 cursor-pointer"
+              >
+                <UserPlus className="h-4 w-4" />
+                <span>Tambah Anggota Tim</span>
+              </button>
+            ) : (
+              <div className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 border border-slate-200/80 px-3.5 py-2 text-xs font-bold text-slate-500 shrink-0">
+                <Shield className="h-3.5 w-3.5 text-slate-400" />
+                <span>Pendaftaran akun dikelola Administrator</span>
+              </div>
+            )}
           </div>
 
           {/* Users Table */}
@@ -273,6 +288,12 @@ export default function TeamPage() {
       <CommandPalette
         isOpen={isCommandOpen}
         onClose={() => setIsCommandOpen(false)}
+      />
+
+      <AddTeamMemberModal
+        isOpen={isAddUserOpen}
+        onClose={() => setIsAddUserOpen(false)}
+        onSuccess={fetchUsers}
       />
     </div>
   );

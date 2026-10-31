@@ -5,21 +5,10 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
   try {
-    let user = await getAuthUser(request);
-
-    // If no cookie session exists yet, default to first Admin user for seamless evaluation
-    if (!user) {
-      const defaultUser = await prisma.user.findFirst({
-        where: { role: "ADMIN", isActive: true },
-      });
-      if (defaultUser) {
-        const { password, ...safe } = defaultUser;
-        user = safe as any;
-      }
-    }
+    const user = await getAuthUser(request);
 
     if (!user) {
-      return NextResponse.json({ user: null, permissions: null });
+      return NextResponse.json({ user: null, permissions: null }, { status: 401 });
     }
 
     const permissions = ROLE_PERMISSIONS[user.role as UserRole] || ROLE_PERMISSIONS.SALES_REP;

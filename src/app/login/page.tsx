@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -22,6 +22,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("notice") === "admin_only") {
+        setNotice("Pendaftaran mandiri dinonaktifkan. Akun pengguna tim hanya dapat dibuat oleh Administrator.");
+      }
+    }
+  }, []);
 
   const handleLogin = async (e?: React.FormEvent, customEmail?: string, customPass?: string) => {
     if (e) e.preventDefault();
@@ -95,6 +105,13 @@ export default function LoginPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="rounded-3xl border border-slate-800 bg-slate-950/80 p-7 shadow-2xl backdrop-blur-xl">
+          {notice && (
+            <div className="mb-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 p-3.5 text-xs font-semibold text-amber-300 flex items-center gap-2.5">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-amber-400" />
+              <span>{notice}</span>
+            </div>
+          )}
+
           {error && (
             <div className="mb-5 rounded-2xl bg-rose-500/10 border border-rose-500/30 p-3.5 text-xs font-semibold text-rose-300">
               {error}
@@ -235,15 +252,9 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="mt-6 text-center">
-            <p className="text-xs text-slate-400">
-              Belum punya akun tim?{" "}
-              <Link
-                href="/register"
-                className="font-bold text-blue-400 hover:text-blue-300 underline"
-              >
-                Daftar Akun Baru
-              </Link>
+          <div className="mt-6 text-center rounded-2xl bg-slate-900/60 border border-slate-800/80 p-3">
+            <p className="text-[11px] text-slate-400 font-medium">
+              🔒 <strong className="text-slate-300">Sistem Akses Internal:</strong> Akun baru hanya dapat didaftarkan dan dikonfigurasi perannya oleh <span className="text-blue-400 font-bold">Administrator</span> melalui modul Manajemen Tim.
             </p>
           </div>
         </div>
