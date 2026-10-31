@@ -4,6 +4,8 @@ A world-class, ultra-lightweight, and modern **Enterprise Mini CRM** built with 
 
 Designed specifically for internal team operations with **Role-Based Access Control (RBAC)** and an **Autonomous Role Agents System** that executes multi-agent tasks concurrently.
 
+📖 **Untuk spesifikasi teknis mendalam, diagram Mermaid, skema relasi ERD, dan dokumentasi REST API lengkap, silakan lihat [ARCHITECTURE.md](./ARCHITECTURE.md).**
+
 ---
 
 ## ✨ Fitur Utama (Key Capabilities)
