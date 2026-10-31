@@ -67,13 +67,3 @@ model Activity {
   deal      Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
-
-model AgentExecutionLog {
-  id         String   @id @default(cuid())
-  agentRole  String   // "SALES_REP", "MANAGER", "ADMIN"
-  agentName  String   // "SDR Agent", "Pipeline Copilot", "RevOps Analyst"
-  task       String
-  summary    String
-  status     String   @default("COMPLETED") // "COMPLETED", "RUNNING", "FAILED"
-  createdAt  DateTime @default(now())
-}

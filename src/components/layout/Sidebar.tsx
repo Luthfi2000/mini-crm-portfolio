@@ -88,12 +88,6 @@ export function Sidebar({ isOpen, onClose, onQuickAddDeal }: SidebarProps) {
       badge: "Deals",
     },
     {
-      name: "Autonomous Agents",
-      href: "/agents",
-      icon: Bot,
-      badge: "AI Roles",
-    },
-    {
       name: "Manajemen Tim",
       href: "/team",
       icon: Shield,
@@ -226,27 +220,20 @@ export function Sidebar({ isOpen, onClose, onQuickAddDeal }: SidebarProps) {
             </nav>
           </div>
 
-          {/* AI Autonomous Agents Promo Box */}
-          <div className="rounded-2xl border border-indigo-200/80 bg-gradient-to-br from-indigo-50/80 via-blue-50/50 to-white p-3.5 space-y-2">
+          {/* Platform Status Box */}
+          <div className="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3 space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-900">
-                <Sparkles className="h-3.5 w-3.5 text-indigo-600" />
-                <span>Autonomous Agents</span>
+              <span className="flex items-center gap-1.5 text-[11px] font-bold text-slate-800">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Nusantara CRM</span>
               </span>
-              <span className="rounded-full bg-indigo-600 px-1.5 py-0.2 text-[9px] font-black text-white">
-                Multi-Agent
+              <span className="rounded-md bg-slate-200/80 px-1.5 py-0.2 text-[9px] font-black text-slate-700">
+                v1.0 Enterprise
               </span>
             </div>
-            <p className="text-[11px] text-slate-600 font-medium leading-relaxed">
-              3 Agen AI otonom untuk Sales Rep, Manager, dan Admin siap bekerja secara simultan.
+            <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
+              Database SQLite lokal aktif dengan proteksi keamanan RBAC terintegrasi.
             </p>
-            <Link
-              href="/agents"
-              className="inline-flex items-center gap-1 text-[11px] font-extrabold text-indigo-600 hover:underline pt-0.5"
-            >
-              <span>Buka Ruang Agen</span>
-              <ChevronRight className="h-3 w-3" />
-            </Link>
           </div>
         </div>
 

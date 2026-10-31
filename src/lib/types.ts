@@ -131,24 +131,3 @@ export interface DashboardStats {
   recentDeals: Deal[];
 }
 
-export interface AgentExecutionLog {
-  id: string;
-  agentRole: UserRole;
-  agentName: string;
-  task: string;
-  summary: string;
-  status: "COMPLETED" | "RUNNING" | "FAILED";
-  createdAt: string | Date;
-}
-
-export interface RoleAgentConfig {
-  id: string;
-  name: string;
-  role: UserRole;
-  roleLabel: string;
-  description: string;
-  avatarColor: string;
-  specialty: string;
-  lastExecution?: string;
-  status: "idle" | "working" | "ready";
-}

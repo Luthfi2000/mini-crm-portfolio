@@ -164,18 +164,6 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                   <ArrowRight className="h-3 w-3 text-slate-400" />
                 </button>
                 <button
-                  onClick={() => handleNavigate("/agents")}
-                  className="w-full flex items-center justify-between rounded-xl px-3 py-2 text-xs font-bold text-slate-700 hover:bg-indigo-50/60 transition-colors"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Bot className="h-4 w-4 text-purple-600" />
-                    <span className="text-purple-900 font-extrabold">Autonomous Role Agents (AI)</span>
-                  </div>
-                  <span className="rounded-full bg-purple-100 text-purple-700 text-[9px] font-black px-1.5 py-0.2">
-                    Multi-Agent
-                  </span>
-                </button>
-                <button
                   onClick={() => handleNavigate("/team")}
                   className="w-full flex items-center justify-between rounded-xl px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
                 >

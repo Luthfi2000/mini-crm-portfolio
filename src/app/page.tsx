@@ -290,7 +290,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* AI Sales Copilot - Clean High-Density Card */}
+              {/* Executive Deal Insights - Clean High-Density Card */}
               <div className="rounded-2xl border border-blue-200/90 bg-gradient-to-r from-blue-50/70 via-indigo-50/40 to-white p-5 shadow-xs">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                   <div className="flex items-start gap-3.5">
@@ -301,10 +301,10 @@ export default function DashboardPage() {
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900">
-                          AI Sales Copilot & Deal Health Insights
+                          Executive Deal Insights & Action Priorities
                         </h4>
                         <span className="rounded-full bg-blue-600 px-2 py-0.2 text-[9px] font-black text-white">
-                          Smart Engine
+                          Smart Analytics
                         </span>
                       </div>
 

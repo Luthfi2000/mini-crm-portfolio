@@ -11,7 +11,6 @@ function hashPassword(password: string): string {
 
 async function main() {
   console.log("🌱 Cleaning existing database...");
-  await prisma.agentExecutionLog.deleteMany({});
   await prisma.activity.deleteMany({});
   await prisma.deal.deleteMany({});
   await prisma.contact.deleteMany({});
@@ -369,37 +368,7 @@ async function main() {
     }
   }
 
-  // Seed initial agent execution logs
-  console.log("🌱 Seeding initial AI Agent execution logs...");
-  const agentLogs = [
-    {
-      agentRole: "SALES_REP",
-      agentName: "SDR Outreach Agent",
-      task: "Lead Qualification & Enrichment",
-      summary: "Memindai 3 inbound lead baru. Berhasil memperkaya data profil Farhan Maulana dan membuat draf pesan pengantar WhatsApp.",
-      status: "COMPLETED",
-    },
-    {
-      agentRole: "MANAGER",
-      agentName: "Pipeline Copilot",
-      task: "Stalled Deal & Proposal Review",
-      summary: "Mendeteksi proposal Finova Mandiri Capital (Rp 75 Jt) siap closing. Menyesuaikan prioritas menjadi High dan menjadwalkan review SLA.",
-      status: "COMPLETED",
-    },
-    {
-      agentRole: "ADMIN",
-      agentName: "RevOps Executive Analyst",
-      task: "Q4 Revenue Forecast & Conversion Audit",
-      summary: "Audit win ratio 30% dari total 10 proyek. Proyeksi pendapatan akhir Q4 mencapai Rp 450 Jt dengan 3 deal di tahap Proposal.",
-      status: "COMPLETED",
-    },
-  ];
-
-  for (const log of agentLogs) {
-    await prisma.agentExecutionLog.create({ data: log });
-  }
-
-  console.log("✅ Seed completed successfully! Users with RBAC, contacts, deals, activities, and agent logs are ready.");
+  console.log("✅ Seed completed successfully! Users with RBAC, contacts, deals, and activities are ready.");
 }
 
 main()
